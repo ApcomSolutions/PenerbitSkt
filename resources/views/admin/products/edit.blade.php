@@ -229,10 +229,3 @@
     </main>
 @endsection
 
-@push('scripts')
-    <!-- Include API Service -->
-    <script src="{{ asset('js/api-service.js') }}"></script>
-
-    <!-- Include Product Edit JS -->
-    <script src="{{ asset('js/admin/product-edit.js') }}"></script>
-@endpush

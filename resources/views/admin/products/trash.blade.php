@@ -97,10 +97,3 @@
     </main>
 @endsection
 
-@push('scripts')
-    <!-- Include API Service -->
-    <script src="{{ asset('js/api-service.js') }}"></script>
-
-    <!-- Include Product Trash JS -->
-    <script src="{{ asset('js/admin/product-trash.js') }}"></script>
-@endpush

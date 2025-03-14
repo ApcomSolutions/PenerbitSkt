@@ -335,4 +335,33 @@ class ProductController extends Controller
             'message' => 'Stock updated successfully'
         ]);
     }
+
+    /**
+     * Get data needed for product creation form
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getCreateFormData()
+    {
+        try {
+            // Get active categories for the dropdown
+            $categories = \App\Models\ProductCategory::where('is_active', true)
+                ->orderBy('name')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'categories' => $categories,
+                    // Add any other data that might be needed for the form
+                ],
+                'message' => 'Form data retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving form data: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

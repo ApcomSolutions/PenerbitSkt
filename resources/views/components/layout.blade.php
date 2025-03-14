@@ -18,7 +18,7 @@
        'resources/js/CustomErrorHandler.js',
        'resources/js/product.js',
        'resources/js/product-detail.js',
-       'resources/js/api-service.js',
+//       'resources/js/api-service.js',
        'resources/js/direct-whatsapp-order.js',
    ])
 

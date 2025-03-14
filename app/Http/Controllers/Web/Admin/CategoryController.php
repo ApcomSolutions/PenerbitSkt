@@ -37,6 +37,6 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        return view('admin.categories.show', ['categoryId' => $id]);
+        return view('admin.categories.create', ['categoryId' => $id]);
     }
 }

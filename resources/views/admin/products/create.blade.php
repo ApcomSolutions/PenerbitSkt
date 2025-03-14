@@ -211,6 +211,14 @@
             </div>
         </form>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Scripts loaded on this page:');
+            document.querySelectorAll('script').forEach(script => {
+                console.log(script.src || 'Inline script');
+            });
+        });
+    </script>
 @endsection
 
 @push('scripts')

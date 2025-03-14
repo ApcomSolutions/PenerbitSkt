@@ -28,12 +28,25 @@ Route::prefix('admin')
         // Categories
         Route::apiResource('categories', ProductCategoryController::class);
 
-        // Products
+        // Products - Important: Custom routes must be defined BEFORE the resource routes
+        // to avoid routing conflicts with parameter patterns
+
+        // Get form data needed for product creation
+        Route::get('products/create-form', [ProductController::class, 'getCreateFormData'])
+            ->name('products.create-form');
+
+        // Product restoration
         Route::post('products/{id}/restore', [ProductController::class, 'restore'])
             ->name('products.restore');
+
+        // Force delete
         Route::delete('products/{id}/force-delete', [ProductController::class, 'forceDelete'])
             ->name('products.force-delete');
+
+        // Stock update
         Route::post('products/{id}/stock', [ProductController::class, 'updateStock'])
-            ->name('products.update-stock');
+            ->name('products.stock');
+
+        // After all custom routes, define the standard resource routes
         Route::apiResource('products', ProductController::class);
     });

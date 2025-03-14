@@ -109,8 +109,7 @@
 
             // Muat script Google Maps API
             var script = document.createElement('script');
-            script.src =
-                "https://maps.googleapis.com/maps/api/js?key=AIzaSyAwu4CGUgxRjUN4pahOIpTsKmKw35gWgN8&callback=initMap";
+            script.src = "https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_api_key') }}&callback=initMap";
             script.async = true;
             script.defer = true;
 

@@ -117,10 +117,3 @@
     </main>
 @endsection
 
-@push('scripts')
-    <!-- Include API Service -->
-    <script src="{{ asset('js/api-service.js') }}"></script>
-
-    <!-- Include Product Index JS -->
-    <script src="{{ asset('js/admin/product-index.js') }}"></script>
-@endpush
