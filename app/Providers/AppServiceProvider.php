@@ -29,5 +29,6 @@ class AppServiceProvider extends ServiceProvider
         Blade::component('layout', \App\View\Components\Layout::class);
         Blade::component('navbar', \App\View\Components\Navbar::class);
         Blade::component('footer', \App\View\Components\Footer::class);
+        Blade::component('admin-layout', \App\View\Components\AdminLayout::class);
     }
 }

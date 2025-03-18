@@ -34,9 +34,9 @@
 @endsection
 
 @push('scripts')
-    <!-- Include API Service -->
+    <!-- IMPORTANT: Load API Service first -->
     <script src="{{ asset('js/api-service.js') }}"></script>
 
-    <!-- Include Product Show JS -->
+    <!-- Then load page-specific scripts -->
     <script src="{{ asset('js/admin/product-show.js') }}"></script>
 @endpush

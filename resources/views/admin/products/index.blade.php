@@ -1,7 +1,6 @@
 {{--resources/views/admin/products/index.blade.php--}}
 @extends('layouts.admin')
 
-
 @section('content')
     @include('admin.partials.AdminHeader', [
         'title' => 'Product Management',
@@ -117,3 +116,10 @@
     </main>
 @endsection
 
+@push('scripts')
+    <!-- IMPORTANT: Load API Service first -->
+    <script src="{{ asset('js/api-service.js') }}"></script>
+
+    <!-- Then load page-specific scripts -->
+    <script src="{{ asset('js/admin/product-index.js') }}"></script>
+@endpush

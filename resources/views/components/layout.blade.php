@@ -16,10 +16,6 @@
        'resources/css/app.css',
        'resources/js/app.js',
        'resources/js/CustomErrorHandler.js',
-       'resources/js/product.js',
-       'resources/js/product-detail.js',
-//       'resources/js/api-service.js',
-       'resources/js/direct-whatsapp-order.js',
    ])
 
     <!-- Load route-specific JavaScript files -->

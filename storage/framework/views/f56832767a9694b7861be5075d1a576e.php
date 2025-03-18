@@ -1,0 +1,263 @@
+
+<?php if (isset($component)) { $__componentOriginal1f9e5f64f242295036c059d9dc1c375c = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal1f9e5f64f242295036c059d9dc1c375c = $attributes; } ?>
+<?php $component = App\View\Components\Layout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\Layout::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+    <?php if (isset($component)) { $__componentOriginalb9eddf53444261b5c229e9d8b9f1298e = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb9eddf53444261b5c229e9d8b9f1298e = $attributes; } ?>
+<?php $component = App\View\Components\Navbar::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('navbar'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\Navbar::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?> <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb9eddf53444261b5c229e9d8b9f1298e)): ?>
+<?php $attributes = $__attributesOriginalb9eddf53444261b5c229e9d8b9f1298e; ?>
+<?php unset($__attributesOriginalb9eddf53444261b5c229e9d8b9f1298e); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb9eddf53444261b5c229e9d8b9f1298e)): ?>
+<?php $component = $__componentOriginalb9eddf53444261b5c229e9d8b9f1298e; ?>
+<?php unset($__componentOriginalb9eddf53444261b5c229e9d8b9f1298e); ?>
+<?php endif; ?>
+
+     <?php $__env->slot('title', null, []); ?> 
+        Produk Kami - Penerbit SKT
+     <?php $__env->endSlot(); ?>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-500 to-indigo-600 py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold text-white mb-4">Koleksi Buku Kami</h1>
+                <p class="text-xl text-white opacity-90 max-w-2xl mx-auto">
+                    Temukan pilihan buku berkualitas untuk menambah wawasan dan pengetahuan Anda
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <!-- Filter and Search Section -->
+            <div class="mb-8 bg-white p-4 rounded-lg shadow">
+                <form id="filter-form" class="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="relative w-full md:w-1/3">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <input type="text" id="search-input" name="search" value="<?php echo e(request('search')); ?>" placeholder="Cari produk..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <select id="category-filter" name="category" class="border border-gray-300 rounded-md px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Semua Kategori</option>
+                            <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($category->id); ?>" <?php echo e(request('category') == $category->id ? 'selected' : ''); ?>>
+                                    <?php echo e($category->name); ?>
+
+                                </option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </select>
+                        <select id="sort-filter" name="sort" class="border border-gray-300 rounded-md px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="latest" <?php echo e(request('sort') == 'latest' ? 'selected' : ''); ?>>Terbaru</option>
+                            <option value="oldest" <?php echo e(request('sort') == 'oldest' ? 'selected' : ''); ?>>Terlama</option>
+                            <option value="price_low" <?php echo e(request('sort') == 'price_low' ? 'selected' : ''); ?>>Harga: Rendah ke Tinggi</option>
+                            <option value="price_high" <?php echo e(request('sort') == 'price_high' ? 'selected' : ''); ?>>Harga: Tinggi ke Rendah</option>
+                        </select>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                            Filter
+                        </button>
+                        <a href="<?php echo e(route('products.index')); ?>" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                            Reset
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <?php $__empty_1 = true; $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
+                        <a href="<?php echo e(route('products.show', $product->slug)); ?>" class="block">
+                            <div class="product-image aspect-[3/4] overflow-hidden bg-gray-100">
+                                <?php if($product->cover_image): ?>
+                                    <img src="<?php echo e(asset('storage/' . $product->cover_image)); ?>" alt="<?php echo e($product->title); ?>" class="w-full h-full object-cover">
+                                <?php elseif($product->images->first()): ?>
+                                    <img src="<?php echo e(asset('storage/' . $product->images->first()->image_path)); ?>" alt="<?php echo e($product->title); ?>" class="w-full h-full object-cover">
+                                <?php else: ?>
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                        </svg>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if($product->discount_price): ?>
+                                    <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
+                                        DISKON
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </a>
+
+                        <div class="p-4">
+                            <?php if($product->categories->count() > 0): ?>
+                                <div class="mb-2">
+                                    <?php $__currentLoopData = $product->categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-1 mb-1"><?php echo e($category->name); ?></span>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <h3 class="text-lg font-semibold mb-1 text-gray-800 line-clamp-2">
+                                <a href="<?php echo e(route('products.show', $product->slug)); ?>" class="hover:text-blue-600">
+                                    <?php echo e($product->title); ?>
+
+                                </a>
+                            </h3>
+
+                            <?php if($product->author): ?>
+                                <p class="text-sm text-gray-600 mb-2"><?php echo e($product->author); ?></p>
+                            <?php endif; ?>
+
+                            <div class="flex justify-between items-center mt-3">
+                                <div>
+                                    <?php if($product->discount_price): ?>
+                                        <p class="text-gray-500 line-through text-sm">Rp <?php echo e(number_format($product->price, 0, ',', '.')); ?></p>
+                                        <p class="text-red-600 font-bold">Rp <?php echo e(number_format($product->discount_price, 0, ',', '.')); ?></p>
+                                    <?php else: ?>
+                                        <p class="text-gray-800 font-bold">Rp <?php echo e(number_format($product->price, 0, ',', '.')); ?></p>
+                                    <?php endif; ?>
+                                </div>
+
+                                <button data-product-id="<?php echo e($product->id); ?>" class="add-to-cart bg-green-600 hover:bg-green-700 text-white p-2 rounded-full" title="Pesan via WhatsApp">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <div class="col-span-full py-8 text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <h3 class="text-xl font-medium text-gray-600">Tidak ada produk yang ditemukan</h3>
+                        <p class="text-gray-500 mt-2">Coba ubah filter atau cari dengan kata kunci yang berbeda</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <!-- Pagination -->
+            <div class="mt-8">
+                <?php echo e($products->withQueryString()->links()); ?>
+
+            </div>
+        </div>
+    </section>
+
+    <?php if (isset($component)) { $__componentOriginal99051027c5120c83a2f9a5ae7c4c3cfa = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal99051027c5120c83a2f9a5ae7c4c3cfa = $attributes; } ?>
+<?php $component = App\View\Components\Footer::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('footer'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\Footer::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?> <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal99051027c5120c83a2f9a5ae7c4c3cfa)): ?>
+<?php $attributes = $__attributesOriginal99051027c5120c83a2f9a5ae7c4c3cfa; ?>
+<?php unset($__attributesOriginal99051027c5120c83a2f9a5ae7c4c3cfa); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal99051027c5120c83a2f9a5ae7c4c3cfa)): ?>
+<?php $component = $__componentOriginal99051027c5120c83a2f9a5ae7c4c3cfa; ?>
+<?php unset($__componentOriginal99051027c5120c83a2f9a5ae7c4c3cfa); ?>
+<?php endif; ?>
+    <?php $__env->startPush('scripts'); ?>
+        <!-- Include API Service -->
+        <script src="<?php echo e(asset('js/api-service.js')); ?>"></script>
+
+        <!-- Custom inline script for WhatsApp buttons -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('Initializing WhatsApp buttons - Index Page');
+                // Initialize WhatsApp order buttons in product listing
+                const whatsappButtons = document.querySelectorAll('.add-to-cart');
+
+                if (whatsappButtons.length > 0) {
+                    console.log('Found', whatsappButtons.length, 'WhatsApp buttons');
+                    whatsappButtons.forEach(button => {
+                        button.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            const productId = this.getAttribute('data-product-id');
+                            console.log('WhatsApp button clicked for product ID:', productId);
+
+                            // Get product details from the DOM
+                            const productCard = this.closest('.product-card');
+                            if (!productCard) {
+                                console.error('Product card not found');
+                                return;
+                            }
+
+                            const productTitle = productCard.querySelector('h3 a').textContent.trim();
+                            const productPriceElement = productCard.querySelector('.text-red-600.font-bold, .text-gray-800.font-bold');
+                            const productPrice = productPriceElement ? productPriceElement.textContent.trim() : 'Tidak tersedia';
+
+                            // Show loading state briefly
+                            const originalContent = this.innerHTML;
+                            this.innerHTML = '<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+                            this.disabled = true;
+
+                            // Default WhatsApp number
+                            const whatsappNumber = "628125881289";
+
+                            // Create message text
+                            const message = `Halo, saya ingin memesan:\n\n*${productTitle}*\nHarga: ${productPrice}\nJumlah: 1\n\nMohon informasi lebih lanjut. Terima kasih.`;
+
+                            // Encode for URL
+                            const encodedMessage = encodeURIComponent(message);
+
+                            // Create WhatsApp URL
+                            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+                            // Reset button after delay
+                            setTimeout(() => {
+                                this.innerHTML = originalContent;
+                                this.disabled = false;
+
+                                // Open WhatsApp in new tab
+                                window.open(whatsappUrl, '_blank');
+                            }, 1000);
+                        });
+                    });
+                }
+            });
+        </script>
+    <?php $__env->stopPush(); ?>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal1f9e5f64f242295036c059d9dc1c375c)): ?>
+<?php $attributes = $__attributesOriginal1f9e5f64f242295036c059d9dc1c375c; ?>
+<?php unset($__attributesOriginal1f9e5f64f242295036c059d9dc1c375c); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal1f9e5f64f242295036c059d9dc1c375c)): ?>
+<?php $component = $__componentOriginal1f9e5f64f242295036c059d9dc1c375c; ?>
+<?php unset($__componentOriginal1f9e5f64f242295036c059d9dc1c375c); ?>
+<?php endif; ?>
+<?php /**PATH C:\laragon\www\PenerbitSkt\resources\views/products/index.blade.php ENDPATH**/ ?>

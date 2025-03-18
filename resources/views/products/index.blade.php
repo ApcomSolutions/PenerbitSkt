@@ -139,4 +139,67 @@
     </section>
 
     <x-footer></x-footer>
+    @push('scripts')
+        <!-- Include API Service -->
+        <script src="{{ asset('js/api-service.js') }}"></script>
+
+        <!-- Custom inline script for WhatsApp buttons -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('Initializing WhatsApp buttons - Index Page');
+                // Initialize WhatsApp order buttons in product listing
+                const whatsappButtons = document.querySelectorAll('.add-to-cart');
+
+                if (whatsappButtons.length > 0) {
+                    console.log('Found', whatsappButtons.length, 'WhatsApp buttons');
+                    whatsappButtons.forEach(button => {
+                        button.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            const productId = this.getAttribute('data-product-id');
+                            console.log('WhatsApp button clicked for product ID:', productId);
+
+                            // Get product details from the DOM
+                            const productCard = this.closest('.product-card');
+                            if (!productCard) {
+                                console.error('Product card not found');
+                                return;
+                            }
+
+                            const productTitle = productCard.querySelector('h3 a').textContent.trim();
+                            const productPriceElement = productCard.querySelector('.text-red-600.font-bold, .text-gray-800.font-bold');
+                            const productPrice = productPriceElement ? productPriceElement.textContent.trim() : 'Tidak tersedia';
+
+                            // Show loading state briefly
+                            const originalContent = this.innerHTML;
+                            this.innerHTML = '<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+                            this.disabled = true;
+
+                            // Default WhatsApp number
+                            const whatsappNumber = "628125881289";
+
+                            // Create message text
+                            const message = `Halo, saya ingin memesan:\n\n*${productTitle}*\nHarga: ${productPrice}\nJumlah: 1\n\nMohon informasi lebih lanjut. Terima kasih.`;
+
+                            // Encode for URL
+                            const encodedMessage = encodeURIComponent(message);
+
+                            // Create WhatsApp URL
+                            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+                            // Reset button after delay
+                            setTimeout(() => {
+                                this.innerHTML = originalContent;
+                                this.disabled = false;
+
+                                // Open WhatsApp in new tab
+                                window.open(whatsappUrl, '_blank');
+                            }, 1000);
+                        });
+                    });
+                }
+            });
+        </script>
+    @endpush
 </x-layout>

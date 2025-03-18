@@ -34,7 +34,7 @@ const ApiService = {
             }
 
             const error = await response.json();
-            throw new Error(error.message || 'An error occurred');
+            throw error; // Throw the entire error object to access errors field
         }
         return response.json();
     },
@@ -52,6 +52,17 @@ const ApiService = {
                 method: 'GET',
                 headers: ApiService.getHeaders(),
                 credentials: 'same-origin' // Include cookies in the request
+            }).then(ApiService.parseResponse);
+        },
+
+        /**
+         * Get data needed for product creation form
+         */
+        getCreateFormData() {
+            return fetch(`/api/admin/products/create-form`, {
+                method: 'GET',
+                headers: ApiService.getHeaders(),
+                credentials: 'same-origin'
             }).then(ApiService.parseResponse);
         },
 
@@ -157,7 +168,7 @@ const ApiService = {
          */
         updateStock(id, quantity, operation) {
             return fetch(`/api/admin/products/${id}/stock`, {
-                method: 'PUT',
+                method: 'POST',
                 headers: ApiService.getHeaders(),
                 body: JSON.stringify({ quantity, operation }),
                 credentials: 'same-origin' // Include cookies in the request

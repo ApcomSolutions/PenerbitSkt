@@ -34,7 +34,9 @@ Route::prefix('admin')
         // Categories
         Route::apiResource('categories', ProductCategoryController::class);
 
-        // Products
+        // Products - Important: Specific routes before resource routes
+        Route::get('products/create-form', [ProductController::class, 'getCreateFormData'])
+            ->name('products.create-form');
         Route::post('products/{id}/restore', [ProductController::class, 'restore'])
             ->name('products.restore');
         Route::delete('products/{id}/force-delete', [ProductController::class, 'forceDelete'])
@@ -112,14 +114,43 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     // Categories
     Route::resource('categories', CategoryController::class);
 
-    // Products
+    // Products - Define specific routes explicitly
+    Route::get('products', [AdminProductController::class, 'index'])
+        ->name('products.index');
+
+    Route::get('products/create', [AdminProductController::class, 'create'])
+        ->name('products.create');
+
+    Route::post('products', [AdminProductController::class, 'store'])
+        ->name('products.store');
+
     Route::get('products/trash', [AdminProductController::class, 'trash'])
         ->name('products.trash');
+
+    Route::get('products/dump-views', [AdminProductController::class, 'dumpAllViews']);
+
     Route::post('products/{id}/restore', [AdminProductController::class, 'restore'])
         ->name('products.restore');
+
     Route::delete('products/{id}/force-delete', [AdminProductController::class, 'forceDelete'])
         ->name('products.force-delete');
-    Route::resource('products', AdminProductController::class);
+
+    // Define ID routes with constraints - only match numeric IDs
+    Route::get('products/{product}', [AdminProductController::class, 'show'])
+        ->name('products.show')
+        ->where('product', '[0-9]+');
+
+    Route::get('products/{product}/edit', [AdminProductController::class, 'edit'])
+        ->name('products.edit')
+        ->where('product', '[0-9]+');
+
+    Route::put('products/{product}', [AdminProductController::class, 'update'])
+        ->name('products.update')
+        ->where('product', '[0-9]+');
+
+    Route::delete('products/{product}', [AdminProductController::class, 'destroy'])
+        ->name('products.destroy')
+        ->where('product', '[0-9]+');
 });
 
 // 📚 Product routes

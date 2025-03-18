@@ -102,7 +102,7 @@
                         @endif
 
                         <!-- Price -->
-                        <div class="mb-6">
+                        <div class="mb-6 product-price-container">
                             @if($product->discount_price)
                                 <div class="flex items-center">
                                     <p class="text-gray-500 line-through text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
@@ -110,9 +110,9 @@
                                         {{ round((1 - $product->discount_price / $product->price) * 100) }}% OFF
                                     </p>
                                 </div>
-                                <p class="text-3xl font-bold text-red-600">Rp {{ number_format($product->discount_price, 0, ',', '.') }}</p>
+                                <p class="text-3xl font-bold text-red-600 product-price">Rp {{ number_format($product->discount_price, 0, ',', '.') }}</p>
                             @else
-                                <p class="text-3xl font-bold text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                                <p class="text-3xl font-bold text-gray-900 product-price">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                             @endif
                         </div>
 
@@ -141,19 +141,25 @@
                                 <label for="quantity" class="mr-2 font-medium">Jumlah:</label>
                                 <div class="custom-number-input h-10 w-32">
                                     <div class="flex flex-row h-10 w-full rounded-lg relative bg-transparent">
-                                        <button data-action="decrement" class="bg-gray-200 text-gray-600 hover:text-gray-700 hover:bg-gray-300 h-full w-20 rounded-l cursor-pointer">
+                                        <button id="btn-decrement" type="button" class="bg-gray-200 text-gray-600 hover:text-gray-700 hover:bg-gray-300 h-full w-20 rounded-l cursor-pointer">
                                             <span class="m-auto text-2xl font-thin">−</span>
                                         </button>
                                         <input type="number" id="quantity" class="outline-none focus:outline-none text-center w-full bg-gray-100 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700" name="quantity" value="1" min="1" max="{{ $product->stock }}">
-                                        <button data-action="increment" class="bg-gray-200 text-gray-600 hover:text-gray-700 hover:bg-gray-300 h-full w-20 rounded-r cursor-pointer">
+                                        <button id="btn-increment" type="button" class="bg-gray-200 text-gray-600 hover:text-gray-700 hover:bg-gray-300 h-full w-20 rounded-r cursor-pointer">
                                             <span class="m-auto text-2xl font-thin">+</span>
                                         </button>
                                     </div>
                                 </div>
                             </div>
 
-                            <button id="add-to-cart-btn" class="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-md font-semibold flex items-center justify-center"
-                                    data-product-id="{{ $product->id }}" {{ $product->stock <= 0 ? 'disabled' : '' }}>
+                            <!-- Inline onclick handler -->
+                            <button
+                                id="whatsapp-order-btn"
+                                class="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-md font-semibold flex items-center justify-center"
+                                data-product-id="{{ $product->id }}"
+                                {{ $product->stock <= 0 ? 'disabled' : '' }}
+                                onclick="orderViaWhatsApp(event)"
+                            >
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                 </svg>
@@ -289,7 +295,161 @@
     </section>
 </x-layout>
 
+<!-- Penempatkan script WhatsApp sebelum semua script lainnya -->
+<script>
+    // Fungsi WhatsApp dengan inline onclick
+    function orderViaWhatsApp(event) {
+        event.preventDefault();
+
+        // Check if button is disabled
+        const button = document.getElementById('whatsapp-order-btn');
+        if (button.hasAttribute('disabled')) {
+            alert('Maaf, produk sedang tidak tersedia');
+            return;
+        }
+
+        // Get quantity
+        const quantityInput = document.getElementById('quantity');
+        const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+
+        // Validate quantity
+        if (isNaN(quantity) || quantity < 1) {
+            alert('Jumlah tidak valid');
+            return;
+        }
+
+        // Get product title
+        const productTitle = document.querySelector('h1.text-3xl').textContent.trim();
+
+        // Metode baru: dapatkan harga dari elemen dengan class yang spesifik
+        let productPrice = "Tidak tersedia";
+        const priceElement = document.querySelector('.product-price');
+        if (priceElement) {
+            productPrice = priceElement.textContent.trim();
+        }
+
+        // Show loading state
+        const originalContent = button.innerHTML;
+        button.innerHTML = '<svg class="animate-spin h-5 w-5 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Memproses...';
+        button.disabled = true;
+
+        // WhatsApp number
+        const whatsappNumber = "628125881289";
+
+        // Create message with format yang lebih baik
+        const message = `Halo, saya ingin memesan produk berikut:
+
+*Produk:* ${productTitle}
+*Harga:* ${productPrice}
+*Jumlah:* ${quantity}
+
+Terima kasih.`;
+
+        // Create WhatsApp URL
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+        // Reset button and open WhatsApp
+        setTimeout(function() {
+            button.innerHTML = originalContent;
+            button.disabled = false;
+
+            window.open(whatsappUrl, '_blank');
+        }, 1000);
+    }
+</script>
+
 @push('scripts')
-    <script src="{{ asset('js/product-detail.js') }}"></script>
-    <script src="{{ asset('js/direct-whatsapp-order.js') }}"></script>
-@endpush">
+    <!-- JS untuk fungsionalitas lainnya -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Thumbnails gallery
+            const thumbnails = document.querySelectorAll('.thumbnail-image');
+            const mainImage = document.getElementById('main-product-image');
+
+            if (thumbnails.length && mainImage) {
+                thumbnails.forEach(function(thumbnail) {
+                    thumbnail.addEventListener('click', function() {
+                        mainImage.src = this.getAttribute('data-image');
+
+                        // Update active thumbnail border
+                        document.querySelectorAll('.thumbnail-item').forEach(function(item) {
+                            item.classList.remove('border-blue-500');
+                            item.classList.add('border-gray-200');
+                        });
+
+                        this.parentElement.classList.remove('border-gray-200');
+                        this.parentElement.classList.add('border-blue-500');
+                    });
+                });
+            }
+
+            // Quantity buttons
+            const quantityInput = document.getElementById('quantity');
+            const decrementBtn = document.getElementById('btn-decrement');
+            const incrementBtn = document.getElementById('btn-increment');
+
+            if (quantityInput && decrementBtn && incrementBtn) {
+                decrementBtn.addEventListener('click', function() {
+                    const currentValue = parseInt(quantityInput.value);
+                    if (currentValue > 1) {
+                        quantityInput.value = currentValue - 1;
+                    }
+                });
+
+                incrementBtn.addEventListener('click', function() {
+                    const currentValue = parseInt(quantityInput.value);
+                    const maxValue = parseInt(quantityInput.getAttribute('max') || 999);
+
+                    if (currentValue < maxValue) {
+                        quantityInput.value = currentValue + 1;
+                    }
+                });
+
+                // Ensure valid manual input
+                quantityInput.addEventListener('change', function() {
+                    const currentValue = parseInt(this.value);
+                    const minValue = parseInt(this.getAttribute('min') || 1);
+                    const maxValue = parseInt(this.getAttribute('max') || 999);
+
+                    if (isNaN(currentValue) || currentValue < minValue) {
+                        this.value = minValue;
+                    } else if (currentValue > maxValue) {
+                        this.value = maxValue;
+                    }
+                });
+            }
+
+            // Tabs
+            const tabButtons = document.querySelectorAll('.tab-button');
+            if (tabButtons.length) {
+                tabButtons.forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        const targetId = this.getAttribute('data-target');
+
+                        // Hide all tab content
+                        document.querySelectorAll('.tab-content').forEach(function(content) {
+                            content.classList.add('hidden');
+                            content.classList.remove('block');
+                        });
+
+                        // Show target content
+                        const targetContent = document.getElementById(targetId);
+                        if (targetContent) {
+                            targetContent.classList.remove('hidden');
+                            targetContent.classList.add('block');
+                        }
+
+                        // Update active tab
+                        tabButtons.forEach(function(tab) {
+                            tab.classList.remove('tab-active', 'border-blue-500', 'text-blue-600');
+                            tab.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                        });
+
+                        this.classList.add('tab-active', 'border-blue-500', 'text-blue-600');
+                        this.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                    });
+                });
+            }
+        });
+    </script>
+@endpush
