@@ -229,3 +229,11 @@
     </main>
 @endsection
 
+
+@push('scripts')
+    <!-- IMPORTANT: Load API Service first -->
+    <script src="{{ asset('js/api-service.js') }}"></script>
+
+    <!-- Then load page-specific scripts -->
+    <script src="{{ asset('js/admin/product-edit.js') }}"></script>
+@endpush
